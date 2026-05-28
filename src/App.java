@@ -28,26 +28,22 @@ public class App {
                 String nombreTarea = sc.nextLine();
                 List<Tarea> nuevasTareas = agregar_tareas(tareas, nombreTarea);
                 System.out.println("Se ha registrado: " + nuevasTareas.get(nuevasTareas.size() - 1));
-
             }
-            if (tareas.size() >= 1) {
-                if (option == 2) {
-                    obtener_tareas();
+            if (option == 2) {
+                mostrar_tareas(tareas);
+            } else if (option == 3) {
+                System.out.println("Ingresa el numero de la tarea que deseas actualizar");
+                int tareaSeleccionada = sc.nextInt() - 1;
+                if (tareaSeleccionada >= tareas.size() || tareaSeleccionada < 0) {
+                    System.err.println("La tarea " + tareaSeleccionada
+                            + " no existe, intenta de nuevo con un numero valido en la siguiente lista:  ");
                     mostrar_tareas(tareas);
-                } else if (option == 3) {
-                    System.out.println("Ingresa el numero de la tarea que deseas actualizar");
-                    int tareaSeleccionada = sc.nextInt() - 1;
-                    if (tareaSeleccionada > tareas.size()) {
-                        System.err.println("La tarea " + tareaSeleccionada
-                                + " no existe, intenta de nuevo con un numero valido en la siguiente lista:  ");
-                        mostrar_tareas(tareas);
-                        tareaSeleccionada = sc.nextInt() - 1;
-                    }
-                    marcar_completada(tareas, tareaSeleccionada);
-                } else if (option == 4) {
-                    int pendientes = contar_tareas_pendientes(tareas, 0);
-                    System.out.println("Hay " + pendientes + " tareas pendientes por completar.");
+                    tareaSeleccionada = sc.nextInt() - 1;
                 }
+                marcar_completada(tareas, tareaSeleccionada);
+            } else if (option == 4) {
+                int pendientes = contar_tareas_pendientes(tareas, 0);
+                System.out.println("Hay " + pendientes + " tareas pendientes por completar.");
             }
 
         } while (option != 0);
@@ -67,7 +63,6 @@ public class App {
         if (indiceInicial == tareas.size()) {
             return 0;
         }
-
         Tarea tareaActual = tareas.get(indiceInicial);
 
         if (!tareaActual.isComplete) {
@@ -81,8 +76,12 @@ public class App {
      * Metodo que actualiza el estado de la tarea
      */
     public static void marcar_completada(List<Tarea> listaTareas, int indice) {
-        tareas.get(indice).isComplete = !tareas.get(indice).isComplete;
-        System.out.println(tareas.get(indice));
+        try {
+            tareas.get(indice).isComplete = !tareas.get(indice).isComplete;
+            System.out.println(tareas.get(indice));
+        } catch (IndexOutOfBoundsException e) {
+            System.err.println("La Posición ingresada no es valida.");
+        }
     }
 
     /*
@@ -116,14 +115,12 @@ public class App {
      * se agrega con descripcion de tarea, el status que por defecto sera falso y se
      * crea un ID
      */
-
-    // -------------------Pendiente por corregir, debe recibir lista y tarea y
-    // regresar lista modificada
     public static List<Tarea> agregar_tareas(List<Tarea> listaTareas, String nuevaTarea) {
 
-        String id = "T" + contador + 1;
+        String id = "T" + (contador + 1);
 
         listaTareas.add(new Tarea(id, nuevaTarea, false));
+        contador++;
         return listaTareas;
     };
 }
