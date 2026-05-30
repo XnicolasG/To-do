@@ -50,15 +50,18 @@ public class App {
         sc.close();
     }
 
-    /*
-     * Metodo encargado de evaluar cuantas tareas estan pendientes por medio de la
-     * lista e indice que se pasan por
-     * medio de parametros. El metodo devuelve 0 en caso el indice sea igual al
-     * largo de la lista.De no ser así
-     * por medio de recursividad se ejecuta la funcion haciendo una suma interta por
-     * medio de iteraciones sobre cada
-     * elemento.
+    /**
+     * Cuenta cuántas tareas están pendientes utilizando recursividad.
+     * Caso base: cuando el índice es igual al tamaño de la lista, retorna 0.
+     * Caso recursivo: si la tarea actual está pendiente, suma 1 y avanza al
+     * siguiente índice;
+     * si está completada, solo avanza al siguiente índice.
+     *
+     * @param tareas        Lista de tareas a evaluar.
+     * @param indiceInicial Posición actual desde donde inicia el conteo.
+     * @return Número total de tareas pendientes.
      */
+
     public static int contar_tareas_pendientes(List<Tarea> tareas, int indiceInicial) {
         if (indiceInicial == tareas.size()) {
             return 0;
@@ -72,9 +75,15 @@ public class App {
         }
     }
 
-    /*
-     * Metodo que actualiza el estado de la tarea
+    /**
+     * Cambia el estado de una tarea según el índice recibido.
+     * Alterna entre completada y pendiente. Incluye manejo de errores
+     * para evitar fallos cuando el índice no existe en la lista.
+     *
+     * @param listaTareas Lista de tareas donde se realizará la actualización.
+     * @param indice      Posición de la tarea a modificar.
      */
+
     public static void marcar_completada(List<Tarea> listaTareas, int indice) {
         try {
             tareas.get(indice).isComplete = !tareas.get(indice).isComplete;
@@ -84,10 +93,13 @@ public class App {
         }
     }
 
-    /*
-     * Este metodo se encarga de mostrar las tareas con [] si estan pendientes
-     * y [X] si estan completadas.
+    /**
+     * Muestra todas las tareas en consola con su número correspondiente.
+     * Usa "[ ]" para tareas pendientes y "[X]" para tareas completadas.
+     *
+     * @param listaTareas Lista de tareas a mostrar.
      */
+
     public static void mostrar_tareas(List<Tarea> listaTareas) {
 
         for (Tarea tarea : listaTareas) {
@@ -96,10 +108,31 @@ public class App {
         }
     }
 
-    /*
-     * Metodo que se encarga de mostrar todas las tareas, con la tarea y el estado
-     * de esta misma.
+    /**
+     * Agrega una nueva tarea a la lista con un ID generado automáticamente.
+     * La tarea se crea con estado pendiente por defecto.
+     *
+     * @param listaTareas Lista actual de tareas.
+     * @param nuevaTarea  Descripción de la tarea a agregar.
+     * @return La lista de tareas actualizada.
      */
+
+    public static List<Tarea> agregar_tareas(List<Tarea> listaTareas, String nuevaTarea) {
+
+        String id = "T" + (contador + 1);
+
+        listaTareas.add(new Tarea(id, nuevaTarea, false));
+        contador++;
+        return listaTareas;
+    };
+
+    /**
+     * Inicializa la lista de tareas con tres tareas por defecto.
+     * Cada tarea incluye un ID, una descripción y un estado inicial pendiente.
+     *
+     * @return Lista inicial de tareas.
+     */
+
     public static List<Tarea> obtener_tareas() {
         List<Tarea> listaInicial = new ArrayList<>();
 
@@ -109,26 +142,15 @@ public class App {
 
         return listaInicial;
     }
-
-    /*
-     * Metodo se encarga de agregar tareas nuevas al arreglo a manera de objetos.
-     * se agrega con descripcion de tarea, el status que por defecto sera falso y se
-     * crea un ID
-     */
-    public static List<Tarea> agregar_tareas(List<Tarea> listaTareas, String nuevaTarea) {
-
-        String id = "T" + (contador + 1);
-
-        listaTareas.add(new Tarea(id, nuevaTarea, false));
-        contador++;
-        return listaTareas;
-    };
 }
 
 /*
- * Clase estudiante guardara la estructura que tendra cada tarea y
- * la manera en que se mostrara la información
+ * Clase Tarea que define la estructura de cada tarea del programa.
+ * Contiene un ID, una descripción y un estado booleano que indica si está
+ * completada.
+ * Incluye un método toString para mostrar la información de forma legible.
  */
+
 class Tarea {
     public String ID;
     public String task;
